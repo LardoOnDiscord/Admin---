@@ -1,0 +1,47 @@
+-- Server script for advanced admin chat commands 
+
+local admins = {"Hydro_ex31", "...", "..."} -- Add admin usernames here
+local commands = {
+    ["kick"] = function(player, targetName)
+        local target = game.Players:FindFirstChild(targetName)
+        if target then
+            target:Kick("Exploit Admin || Kicked: You have been kicked from the Experience.")
+        end
+    end,
+    ["ban"] = function(player, targetName)
+        local target = game.Players:FindFirstChild(targetName)
+        if target then
+            target:Kick("Exploit Admin || Banned: You have been banned from the Experience.")
+            table.insert(bannedPlayers, targetName)
+        end
+    end,
+    ["teleport"] = function(player, targetName)
+        local target = game.Players:FindFirstChild(targetName)
+        if target and target.Character and player.Character then
+            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame
+        end
+    end,
+    ["health"] = function(player, amount)
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.Health = tonumber(amount)
+        end
+    end,
+    ["speed"] = function(player, speed)
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.WalkSpeed = tonumber(speed)
+        end
+    end
+}
+
+local function onChatted(player, message)
+    local args = {}
+    for word in message:gmatch(".") do
+        table.insert(args, word)
+    end
+
+    local command = args[1]
+    local isAdmin = false
+
+    for _, admin in ipairs(admins) do
+        if player.Name == admin then
+            isAdmin = true
